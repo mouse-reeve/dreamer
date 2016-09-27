@@ -8,7 +8,7 @@ class Dream(object):
 
     rules = {
         'start': '#noun.capitalize# #verb#',
-        'noun': ['cat', 'miasma'],
+        'noun': corpus.nouns,
         'verb': ['coagulates', 'dissapates']
     }
 
