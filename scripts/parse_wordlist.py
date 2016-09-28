@@ -1,5 +1,6 @@
 ''' prune the wordlist to something useful '''
 import json
+import re
 import sys
 
 raw = open(sys.argv[1])
@@ -25,6 +26,11 @@ while True:
             json.dumps([lemma])
         except UnicodeDecodeError:
             continue
+
+        # words are already lemmatized, verb tense markers don't matter
+        if re.match('^VB', pos):
+            pos = 'VB'
+
         wordset[pos] = [lemma] if not pos in wordset else wordset[pos] + [lemma]
         wordset[pos] = list(set(wordset[pos]))
 
