@@ -1,5 +1,5 @@
 ''' sample dream '''
-from dreamer.dream import Dream
+from dreamer import Dream
 
 if __name__ == "__main__":
     dream = Dream()
