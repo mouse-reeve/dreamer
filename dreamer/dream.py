@@ -27,7 +27,7 @@ class Dream(object):
             'VP': ['#RBP# #VB#'],
             'VPZ': ['#RBP# #VBZ#'],
             'NP': ['#DT# #JP# %s' % n for n in corpus['NN']] +
-                  ['#JP# %s' % n for n in corpus['NNP']],
+                  corpus['NNP'],
             # --- 50% chance adjective or adverb is used --- #
             'JP': ['', '#JJ#'],
             'RBP': ['', '#RB#'],
