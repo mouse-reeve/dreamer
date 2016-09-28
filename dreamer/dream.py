@@ -13,30 +13,38 @@ class Dream(object):
             '#S2#',
             '#S2#, but then #S32#',
             'You #VP# as #S3#',
-            'It seems like #S32#, or maybe not'],
+            '#S2# but then it #VBZ# #NP#',
+            'It seems like #S32#, or perhaps it #VBZ# you'],
         'sex': '#S2#',
         'flight': '#S2#'
     }
 
 
     def __init__(self, dream_type='general'):
+        # merge general nouns with specific types for a complete nounlist
+        nounlists = [corpus[n] for n in corpus.keys() if n[0:3] == 'NN:']
+        nouns = [i for nouns in nounlists for i in nouns]
+
         self.rules = {
             'S2': ['You #VP# #NP#'],# 2nd-person sentence pattern
             'S3': ['#NP# #VPZ# #NP#'],# 3rd-person sentence pattern
             'S32': ['#NP# #VPZ# you'],# 3rd-person to 2nd-person
             'VP': ['#RBP# #VB#'],
             'VPZ': ['#RBP# #VBZ#'],
-            'NP': ['#DT# #JP# %s' % n for n in corpus['NN']] +
-                  corpus['NNP'],
+            'NP': ['#DTP# #JP# %s' % n for n in nouns] +
+                  corpus['NNP'] + ["person with a #animal# head"],
             # --- 50% chance adjective or adverb is used --- #
             'JP': ['', '#JJ#'],
             'RBP': ['', '#RB#'],
+            # --- prefer a/an articles --- #
+            'DTP': ['a', '#DT#'],
             # --- straight from the corpus --- #
             'VB': corpus['VB'],
             'VBZ': corpus['VBZ'],
             'DT': corpus['DT'],
             'JJ': corpus['JJ'],
-            'RB': corpus['RB']
+            'RB': corpus['RB'],
+            'animal': corpus['NN:animal']
         }
         self.set_type(dream_type)
 
@@ -66,12 +74,13 @@ class Dream(object):
 
     def dream(self):
         ''' create a dream based on provided words '''
-        return self.format_dream(self.grammar.flatten('#start#'))
+        return format_dream(self.grammar.flatten('#start#'))
 
-    def format_dream(self, dream):
-        ''' remove formatting quirks '''
-        # double spaces are produced by optional adjectives
-        dream = re.sub('  ', ' ', dream)
 
-        # get the right a/an to match nouns
-        return re.sub(r' a ([aeiou])', r' an \1', dream)
+def format_dream(dream):
+    ''' remove formatting quirks '''
+    # double spaces are produced by optional adjectives/adverbs
+    dream = re.sub('  ', ' ', dream)
+
+    # get the right a/an to match nouns
+    return re.sub(r' a ([aeiou])', r' an \1', dream)
