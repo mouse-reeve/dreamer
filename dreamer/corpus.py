@@ -8,4 +8,4 @@ corpus = json.load(file('%s/corpus/corpus.json' % cwd))
 nouns = corpus['NN']
 proper_nouns = corpus['NNP']
 verbs = corpus['VB']
-determiners = corpus['DT'] + corpus['WDT']
+determiners = corpus['DT']

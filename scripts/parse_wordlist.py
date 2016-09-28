@@ -27,8 +27,11 @@ while True:
         except UnicodeDecodeError:
             continue
 
-        # skip parts of speech that aren't useful here
+        # these PoSs just aren't useful
         if pos in ['FW', 'POS', 'SYM']:
+            continue
+        # words without vowels are generally acronyms or won't read in tts
+        if not re.match('[aeiouy]', lemma):
             continue
 
         # words are already lemmatized, verb tense markers don't matter
