@@ -8,9 +8,9 @@ class Dream(object):
 
     types = ['general', 'sex', 'flight', 'nightmare']
     grammars = {
-        'general': '#noun.capitalize# #transitive_verb# #noun#',
-        'sex': 'You #transitive_verb# #noun#',
-        'flight': '#noun.capitalize# #transitive_verb# #noun#'
+        'general': '#noun.capitalize# #verb#s #noun#',
+        'sex': 'You #verb# #noun#',
+        'flight': '#noun.capitalize# #verb# #noun#'
     }
 
 
@@ -18,7 +18,7 @@ class Dream(object):
         self.rules = {
             'noun': ['#determiner# %s' % n for n in corpus.nouns] +
                     corpus.proper_nouns,
-            'transitive_verb': corpus.transitive_verbs,
+            'verb': corpus.verbs,
             'determiner': corpus.determiners
         }
         self.set_type(dream_type)

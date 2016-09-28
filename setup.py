@@ -37,5 +37,5 @@ setup(
     packages=['dreamer'],
     include_package_data=True,
 
-    install_requires=['git+https://github.com/aparrish/pytracery.git#egg=tracery']
+    install_requires=['Tracery']
 )
