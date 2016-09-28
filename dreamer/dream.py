@@ -8,7 +8,7 @@ class Dream(object):
 
     types = ['general', 'sex', 'flight', 'nightmare']
     grammars = {
-        'general': '#noun.capitalize# #verb#s #noun#',
+        'general': '#noun.capitalize# #verb# #noun#',
         'sex': 'You #verb# #noun#',
         'flight': '#noun.capitalize# #verb# #noun#'
     }
