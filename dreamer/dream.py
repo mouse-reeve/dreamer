@@ -8,44 +8,75 @@ class Dream(object):
     ''' define the components of a dream '''
 
     types = ['general', 'sex', 'flight', 'nightmare']
+
+    # you're in a car and it kills a deer
+    # you try to run but for some reason you sing instead
+    # a fish befriends you and you eat it before it can report you
+    # you meet a deer but for some reason it is dead
     grammars = {
         'general': [
-            '#S2#',
-            '#S2#, but then #S32#',
-            'You #VP# as #S3#',
-            '#S2# but then it #VBZ# #NP#',
-            'It seems like #S32#, or perhaps it #VBZ# you'],
-        'sex': '#S2#',
-        'flight': '#S2#'
+            'you are in #location# #filler# and #S23#',
+            '#filler# #S23# and then try to #VB:motion# to #location# but it #VBZ#',
+            '#S23#, but then #filler# #S32#',
+            '#filler# #S32#, although #RB:hedge# it #VBZ# you'],
+        'sex': '#S23#',
+        'flight': '#S23#'
     }
 
 
     def __init__(self, dream_type='general'):
         # merge general nouns with specific types for a complete nounlist
-        nounlists = [corpus[n] for n in corpus.keys() if n[0:3] == 'NN:']
+        corpus_keys = corpus.keys()
+        nounlists = [corpus[n] for n in corpus_keys if n[0:3] == 'NN:']
         nouns = [i for nouns in nounlists for i in nouns]
 
+        # computer 3rd person singular forms of verbs
+        verbs_3rd = []
+        for original in corpus['VB']:
+            original = original.split(' ')
+            verb = original[0]
+            verb = re.sub(r'([sch])s$', r'\1ses', verb) #         kiss/kisses
+            verb = re.sub(r'([aeiou])y$', r'\1ys', verb) #        enjoy/enjoys
+            verb = re.sub(r'y$', r'ies', verb) #                  fly/flies
+            verb = re.sub(r'o$', 'oes', verb) #                   go/goes
+            verb = verb + 's' if verb == original[0] else verb # run/runs
+
+            if len(original) > 1:
+                verb = ' '.join([verb] + original[1:])
+            original = ' '.join(original)
+
+            verbs_3rd.append(verb)
+
+        # principals of sentence formation
         self.rules = {
-            'S2': ['You #VP# #NP#'],# 2nd-person sentence pattern
-            'S3': ['#NP# #VPZ# #NP#'],# 3rd-person sentence pattern
+            'S23': ['you #VP# #NP#'],# 2nd-person sentence pattern
+            'S33': ['#NP# #VPZ# #NP#'],# 3rd-person sentence pattern
             'S32': ['#NP# #VPZ# you'],# 3rd-person to 2nd-person
             'VP': ['#RBP# #VB#'],
             'VPZ': ['#RBP# #VBZ#'],
             'NP': ['#DTP# #JP# %s' % n for n in nouns] +
-                  corpus['NNP'] + ["person with a #animal# head"],
-            # --- 50% chance adjective or adverb is used --- #
-            'JP': ['', '#JJ#'],
-            'RBP': ['', '#RB#'],
+                  corpus['NNP'] +
+                  ['#DTP# person with a #NN:animal# head',
+                   '#DTP# #NN:animal# with a #NN:animal# head'],
+            # --- 1/3 chance adjective or adverb is used --- #
+            'JP': ['', '', '#JJ#'],
+            'RBP': ['', '', '#RB#'],
             # --- prefer a/an articles --- #
             'DTP': ['a', '#DT#'],
-            # --- straight from the corpus --- #
-            'VB': corpus['VB'],
-            'VBZ': corpus['VBZ'],
-            'DT': corpus['DT'],
-            'JJ': corpus['JJ'],
-            'RB': corpus['RB'],
-            'animal': corpus['NN:animal']
+            # --- generated verbs --- #
+            'VBZ': verbs_3rd,
+            # --- locations --- #
+            'location': [
+                '#DT# #NN:location#',
+                '#DT# #NN:location#',
+                '#DT# #NN:location#',
+                'your childhood home',
+            ]
         }
+        # --- simple parts of speech --- #
+        for key in corpus_keys:
+            self.rules[key] = corpus[key]
+
         self.set_type(dream_type)
 
 
@@ -79,8 +110,13 @@ class Dream(object):
 
 def format_dream(dream):
     ''' remove formatting quirks '''
+    # optional parts at the start and end cause whitespace
+    dream = dream.strip()
+
     # double spaces are produced by optional adjectives/adverbs
-    dream = re.sub('  ', ' ', dream)
+    dream = re.sub(r' +', ' ', dream)
 
     # get the right a/an to match nouns
-    return re.sub(r' a ([aeiou])', r' an \1', dream)
+    dream = re.sub(r'(\b)a ([aeiou])', r'\1an \2', dream)
+
+    return dream
