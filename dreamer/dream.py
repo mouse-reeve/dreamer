@@ -9,17 +9,22 @@ class Dream(object):
 
     types = ['general', 'sex', 'flight', 'nightmare']
 
-    # you're in a car and it kills a deer
-    # you try to run but for some reason you sing instead
-    # a fish befriends you and you eat it before it can report you
-    # you meet a deer but for some reason it is dead
     grammars = {
         'general': [
-            'you are in #location# #filler# and #S23#',
-            '#filler# #S23# and then try to #VB:motion# to #location# but it #VBZ#',
-            '#S23#, but then #filler# #S32#',
-            '#filler# #S32#, although #RB:hedge# it #VBZ# you'],
-        'sex': '#S23#',
+            # you're in a car and it kills a deer
+            # you try to run but for some reason you sing instead
+            # a fish befriends you and you eat it before it can report you
+            # you meet a deer but for some reason it is dead
+            '#filler# you are in #location# #event# and #S23#',
+            '#filler# #S23# and then #event# try to #VB:motion# to #location#' \
+                'but it #VBZ# #NP# so you can\'t',
+            '#S23# #event#, but then #filler# #S32#',
+            '#filler# #S32#, although #RB:hedge# it #VBZ# you #event# as well'
+        ],
+
+        'sex': [
+            'You #VB:motion# to #location# with #humanoidP#. #anysex# and then #p-o#'
+        ],
         'flight': '#S23#'
     }
 
@@ -61,17 +66,41 @@ class Dream(object):
             # --- 1/3 chance adjective or adverb is used --- #
             'JP': ['', '', '#JJ#'],
             'RBP': ['', '', '#RB#'],
+            'flesh': ['', '#JJ:flesh#'],
             # --- prefer a/an articles --- #
             'DTP': ['a', '#DT#'],
             # --- generated verbs --- #
             'VBZ': verbs_3rd,
-            # --- locations --- #
+            # --- special structures --- #
             'location': [
                 '#DT# #NN:location#',
                 '#DT# #NN:location#',
                 '#DT# #NN:location#',
                 'your childhood home',
-            ]
+            ],
+            'event': [
+                '', '', '', '', '', '',
+                'during a #NN:event#'
+            ],
+            # --- weird sex stuff --- #
+            'anysex': ['#p-o#', '#o-p#', '#o-o#', '#p-p#'],
+            'p-o': [
+                'you #VB:insertion# your #flesh# #protrusion# #IN# their' \
+                    ' #flesh# #orifice#',
+            ],
+            'o-p': [
+                'they #VB:insertion# their #flesh# #protrusion# #IN# your' \
+                    ' #flesh# #orifice#'
+            ],
+            'o-o': [
+                'you #VB:touch# your #flesh# #orifice# #IN# their #flesh# #orifice#',
+                'they #VB:touch# their #flesh# #orifice# #IN# your #flesh# #orifice#',
+            ],
+            'p-p': [
+                'you #VB:touch# your #flesh# #protrusion# #IN# their #flesh# #protrusion#',
+                'they #VB:touch# their #flesh# #protrusion# #IN# your #flesh# #protrusion#',
+            ],
+            'humanoidP': ['#humanoid#', '#NP#'],
         }
         # --- simple parts of speech --- #
         for key in corpus_keys:
@@ -110,11 +139,10 @@ class Dream(object):
 
 def format_dream(dream):
     ''' remove formatting quirks '''
-    # optional parts at the start and end cause whitespace
+    # optional parts cause unwanted whitespace
     dream = dream.strip()
-
-    # double spaces are produced by optional adjectives/adverbs
     dream = re.sub(r' +', ' ', dream)
+    dream = re.sub(r' ,', ',', dream)
 
     # get the right a/an to match nouns
     dream = re.sub(r'(\b)a ([aeiou])', r'\1an \2', dream)
