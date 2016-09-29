@@ -11,7 +11,6 @@
     "run",
     "fly",
     "float",
-    "slide",
     "bicycle",
     "drive",
     "sneak",
@@ -389,7 +388,7 @@
     "window sill",
     "cabinet",
     "school",
-    "unviersity campus",
+    "university campus",
     "house",
     "golf course",
     "football field",
@@ -1128,9 +1127,7 @@
     "alongside",
     "at",
     "in",
-    "except",
     "outside",
-    "until",
     "above",
     "under",
     "into",
@@ -1146,7 +1143,6 @@
     "up",
     "against",
     "across",
-    "aboard",
     "onto"
   ],
   "DT": [
@@ -1235,9 +1231,6 @@
     "ear",
     "armpit",
     "socket",
-    "cupped hands",
-    "drinking glass",
-    "pile of blankets",
     "open wound",
     "urethra",
     "belly button"
@@ -1291,7 +1284,7 @@
   ],
   "humanoid": [
     "a mannequin",
-    "a humaoid",
+    "something vaguely humaoid",
     "a blob of flesh",
     "a skeleton",
     "your girlfriend",
@@ -1301,7 +1294,37 @@
     "your lover",
     "a duplicate of yourself",
     "something alive",
-    "a crowd of people",
-    "your lone-time friend"
+    "a coworker",
+    "your ex",
+    "an abstract idea",
+    "a glowing orb",
+    "a swarm of bees",
+    "an unknown woman",
+    "an unknown man",
+    "a mysterious cloaked figure",
+    "the first person you find",
+    "martha stewart",
+    "a stranger",
+    "yourself from the future",
+    "yurself from the past",
+    "your long-time friend"
+  ],
+  "VB:react": [
+    "scream",
+    "moan",
+    "whisper secrets",
+    "writhe",
+    "convulse",
+    "squirm",
+    "shiver",
+    "gasp",
+    "flail",
+    "orgasm",
+    "chirp",
+    "squeal",
+    "groan",
+    "drool",
+    "gurgle"
   ]
+
 }

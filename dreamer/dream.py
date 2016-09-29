@@ -23,7 +23,7 @@ class Dream(object):
         ],
 
         'sex': [
-            'You #VB:motion# to #location# with #humanoidP#. #anysex# and then #p-o#'
+            'You #VB:motion# to #location# with #humanoid#. #anysex# and then #p-o# until #reactP#'
         ],
         'flight': '#S23#'
     }
@@ -100,7 +100,7 @@ class Dream(object):
                 'you #VB:touch# your #flesh# #protrusion# #IN# their #flesh# #protrusion#',
                 'they #VB:touch# their #flesh# #protrusion# #IN# your #flesh# #protrusion#',
             ],
-            'humanoidP': ['#humanoid#', '#NP#'],
+            'reactP': ['they #VB:react#', 'you both #VB:react#', 'you #VB:react# and they #VB:react#']
         }
         # --- simple parts of speech --- #
         for key in corpus_keys:
